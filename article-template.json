@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "sourceUrl": "https://example.com/blog/the-build-that-never-shipped",
+  "title": "출시되지 못한 빌드: 작은 스튜디오의 마지막 3주",
+  "originalTitle": "The Build That Never Shipped",
+  "subtitle": "테스트용으로 지어낸 예시 글입니다",
+  "author": "Example Writer",
+  "publisher": "Example Blog",
+  "publishedAt": null,
+  "language": "en",
+  "contentType": "full_translation",
+  "coverImage": null,
+  "description": "규격 예시용으로 지어낸 짧은 글. 마감 직전 빌드 관리가 무너지는 과정을 다룬다.",
+  "tags": ["예시", "빌드 관리"],
+  "note": "규격 설명용 테스트 글입니다. 실제 기사가 아닙니다.",
+  "body": [
+    { "type": "paragraph", "text": "마감 3주 전, 팀은 매일 밤 빌드를 만들고 있었다. 문제는 그 빌드를 아무도 끝까지 돌려 보지 않았다는 점이었다." },
+    { "type": "heading", "text": "첫째 주" },
+    { "type": "paragraph", "text": "QA 담당자는 한 명뿐이었다. 그는 매일 아침 **어제 빌드**를 받아 핵심 경로만 확인했다." },
+    { "type": "quote", "text": "빌드가 나온다는 것과 빌드가 된다는 것은 다른 이야기였다.", "cite": "당시 QA 담당자" },
+    { "type": "image", "src": "https://example.com/images/build-board.jpg", "caption": "당시 사무실 벽에 붙어 있던 빌드 현황판", "credit": "Example Blog", "width": 1600, "height": 900 },
+    { "type": "list", "items": ["야간 빌드 자동화", "스모크 테스트 10분", "실패 시 슬랙 알림"] },
+    { "type": "note", "text": "편집자 주: 이 글은 예시입니다." }
+  ],
+  "originalBody": [],
+  "analysisMarkdown": "## 핵심 요약\n\n작은 팀이 마감 직전 빌드 검증을 건너뛰면서 문제가 쌓였다는 예시 글이다.\n\n::: metrics\n3주 | 마감까지 남은 기간\n1명 | QA 인원\n:::\n\n## 내 관점에서\n\n::: note\n이하 내용은 기사 번역이 아니라 별도 분석이다.\n:::\n\n| 위험 신호 | 대응 |\n|---|---|\n| 빌드는 나오는데 아무도 끝까지 안 돌림 | 매 빌드 스모크 테스트를 정하고 결과를 기록한다. |\n\n- [ ] 오늘 빌드를 처음부터 끝까지 돌려 봤는가?\n- [ ] 실패한 빌드가 누구에게 알려지는가?\n\n::: insight\n빌드 관리의 목표는 빌드를 만드는 것이 아니라 출시 가능한 상태를 매일 확인하는 것이다.\n:::\n",
+  "links": [],
+  "credit": "테스트용 예시"
+}
