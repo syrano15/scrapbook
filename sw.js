@@ -3,8 +3,8 @@
  * - 기사·개인 기록(api.github.com, 비공개 저장소): 여기서 캐시하지 않는다.
  *   (읽은 기사는 앱이 이 기기 브라우저 저장소에만 따로 보관한다)
  */
-var CACHE = "scrapbook-shell-v1";
-var ASSETS = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png", "./icon-512-maskable.png"];
+var CACHE = "scrapbook-shell-v2";
+var ASSETS = ["./", "./index.html", "./manifest.json", "./icon-v2-192.png", "./icon-v2-512.png", "./icon-v2-512-maskable.png"];
 self.addEventListener("install", function (e) {
   self.skipWaiting();
   e.waitUntil(caches.open(CACHE).then(function (c) {
