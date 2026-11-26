@@ -124,6 +124,9 @@ button { cursor: pointer; background: none; border: 0; padding: 0; -webkit-tap-h
 .badge { font-size: 12px; font-weight: 700; padding: 1px 7px; border-radius: 4px; background: var(--bg-soft); color: var(--text-2); }
 .badge.reading { background: var(--accent-soft); color: var(--accent); }
 .badge.done { color: var(--muted); }
+.item.is-done h2 { color: var(--muted); font-weight: 600; }
+.item.is-done p { color: var(--muted); }
+.item.is-done .thumb { opacity: .45; filter: grayscale(1); }
 .star { color: #c58a00; }
 html[data-theme="dark"] .star { color: #e8b64a; }
 .empty { padding: 56px 0; text-align: center; color: var(--muted); font-size: 15px; }
@@ -726,13 +729,13 @@ function renderList() {
     list.forEach(function (a) { ul.appendChild(itemRow(a)); });
   }
   function itemRow(a) {
-    var u = uitem(a.id), li = h("li", "item"), link = h("a");
+    var u = uitem(a.id), li = h("li", "item" + ((u.status || "unread") === "done" ? " is-done" : "")), link = h("a");
     link.href = "#/a/" + encodeURIComponent(a.id);
     link.addEventListener("click", function () { st.y = window.scrollY; save(); sessionStorage.setItem("sb.fromList", "1"); });
     var t = h("div", "txt"), k = h("div", "kick");
     var s = u.status || "unread";
     if (s === "reading") k.appendChild(h("span", "badge reading", "읽는 중" + (u.pos && u.pos.body ? " " + Math.round(u.pos.body * 100) + "%" : "")));
-    else if (s === "done") k.appendChild(h("span", "badge done", "다 읽음"));
+    else if (s === "done") k.appendChild(h("span", "badge done", "✓ 다 읽음"));
     if (u.favorite) k.appendChild(h("span", "star", "★"));
     k.appendChild(h("span", null, [a.publisher, fmtDate(a.publishedAt)].filter(Boolean).join(" · ")));
     if (a.contentType && a.contentType !== "full_translation" && a.contentType !== "original") k.appendChild(h("span", null, "· " + (CTYPE[a.contentType] || a.contentType)));
@@ -1117,7 +1120,7 @@ function renderArticle(id) {
     if (!changed) return;
     pos[state.tab] = r; pos.tab = state.tab;
     var patch = { pos: pos };
-    if ((cur.status || "unread") === "unread" && r > 0.05) patch.status = "reading";
+    if ((cur.status || "unread") === "unread" && r > 0.2) patch.status = "reading";
     /* 위치만 바뀐 건 이 기기에 바로 저장하고, 서버에는 천천히 올린다 */
     DB.user.items[id] = Object.assign({}, cur, patch, { updatedAt: nowIso() });
     lsSet(K.user, DB.user);
@@ -1176,12 +1179,17 @@ function renderArticle(id) {
     if (view && viewArticleId !== id) return;
     if (!a) { if (!got.cached) { main.innerHTML = ""; main.appendChild(h("div", "empty", meta ? "기사를 찾지 못했어요." : "없는 글이에요. 목록으로 돌아가 주세요.")); } return; }
     if (!got.cached || JSON.stringify(a) !== JSON.stringify(got.cached)) { var y = window.scrollY; draw(a); if (got.cached) window.scrollTo(0, y); }
-    if ((uitem(id).status || "unread") === "unread") setU(id, { status: "reading", openedAt: nowIso() });
+    /* 열기만 해서는 바꾸지 않는다: 30초 넘게 머물렀거나 본문을 20% 읽었을 때만 '읽는 중' */
+    clearTimeout(dwellTimer);
+    dwellTimer = setTimeout(function () {
+      if (viewArticleId !== id || !/^#\/a\//.test(location.hash) || document.hidden) return;
+      if ((uitem(id).status || "unread") === "unread") setU(id, { status: "reading", openedAt: nowIso() });
+    }, 30000);
   }).catch(function (e) {
     if (!got.cached) { main.innerHTML = ""; main.appendChild(h("div", "empty", e.message || "불러오지 못했어요.")); }
   });
 }
-var viewArticleId = null;
+var viewArticleId = null, dwellTimer = null;
 
 function sheet(title) {
   var bg = h("div", "sheet-bg"), sh = h("div", "sheet"); sh.setAttribute("role", "dialog"); sh.setAttribute("aria-label", title);
